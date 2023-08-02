@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Finances.Services.Expenses.Commands.Create
+namespace Finances.Services.Expenses.Commands
 {
     public class CreateExpenseCommand : IRequest<int>
     {
@@ -109,3 +109,4 @@ namespace Finances.Services.Expenses.Commands.Create
             return expense.Id;
         }
     }
+}

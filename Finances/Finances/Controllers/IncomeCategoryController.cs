@@ -1,6 +1,5 @@
 ﻿using Finances.Controllers;
 using Finances.Services.IncomeCategories.Commands;
-using Finances.Services.IncomeCategories.Commands.Delete;
 using Finances.Services.IncomeCategories.Queries.GetAll;
 using Finances.Services.IncomeCategories.Queries.GetIncomesByCategory;
 using Microsoft.AspNetCore.Mvc;

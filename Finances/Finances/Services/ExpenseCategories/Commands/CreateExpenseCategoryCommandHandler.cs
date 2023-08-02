@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Finances.Services.ExpenseCategories.Commands.Create
+namespace Finances.Services.ExpenseCategories.Commands
 {
     public class CreateExpenseCategoryCommand : IRequest<int>
     {
@@ -56,7 +56,7 @@ namespace Finances.Services.ExpenseCategories.Commands.Create
 
         public async Task<int> Handle(CreateExpenseCategoryCommand request, CancellationToken cancellationToken)
         {
-            var user = await this.userManager.FindByIdAsync(request.UserId);
+            var user = await userManager.FindByIdAsync(request.UserId);
 
             if (user == null)
             {

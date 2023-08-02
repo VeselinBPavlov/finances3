@@ -2,7 +2,7 @@
 using Finances.Common.Interfaces;
 using MediatR;
 
-namespace Finances.Services.Expenses.Commands.Delete
+namespace Finances.Services.Expenses.Commands
 {
     public class DeleteExpenseCommand : IRequest<bool>
     {

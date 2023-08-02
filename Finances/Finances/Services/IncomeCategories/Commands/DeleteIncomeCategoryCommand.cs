@@ -4,7 +4,7 @@ using Finances.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Finances.Services.IncomeCategories.Commands.Delete
+namespace Finances.Services.IncomeCategories.Commands
 {
     public class DeleteIncomeCategoryCommand : IRequest<bool>
     {

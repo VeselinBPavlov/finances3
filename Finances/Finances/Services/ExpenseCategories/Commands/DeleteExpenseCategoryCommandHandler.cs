@@ -4,7 +4,7 @@ using Finances.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Finances.Services.ExpenseCategories.Commands.Delete
+namespace Finances.Services.ExpenseCategories.Commands
 {
     public class DeleteExpenseCategoryCommand : IRequest<bool>
     {

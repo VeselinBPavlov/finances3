@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Finances.Services.IncomeCategories.Commands.Create
+namespace Finances.Services.IncomeCategories.Commands
 {
     public class CreateIncomeCategoryCommand : IRequest<int>
     {

@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Finance.Application.Expenses.Commands.Update
+namespace Finances.Services.Expenses.Commands
 {
     public class UpdateExpenseCommand : IRequest<int>
     {
@@ -86,17 +86,17 @@ namespace Finance.Application.Expenses.Commands.Update
 
         public async Task<int> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
-            var expense = await this.context.Expenses.FindAsync(request.Id);
+            var expense = await context.Expenses.FindAsync(request.Id);
 
             if (expense == null)
                 throw new NotFoundException(nameof(Expense), request.Id);
 
-            var user = await this.userManager.FindByIdAsync(request.UserId);
+            var user = await userManager.FindByIdAsync(request.UserId);
 
             if (user == null)
                 throw new NotFoundException(nameof(ApplicationUser), request.Id);
 
-            var category = await this.context.ExpenseCategories.FindAsync(request.CategoryId);
+            var category = await context.ExpenseCategories.FindAsync(request.CategoryId);
 
             if (category == null)
                 throw new NotFoundException(nameof(ExpenseCategory), request.Id);
@@ -108,9 +108,9 @@ namespace Finance.Application.Expenses.Commands.Update
             expense.UserId = request.UserId;
             expense.CategoryId = request.CategoryId;
 
-            this.context.Expenses.Update(expense);
+            context.Expenses.Update(expense);
 
-            await this.context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
 
             return expense.Id;
         }
