@@ -1,5 +1,5 @@
 ﻿using Finances.Controllers;
-using Finances.Services.ExpenseCategories.Commands.Create;
+using Finances.Services.ExpenseCategories.Commands;
 using Finances.Services.ExpenseCategories.Commands.Delete;
 using Finances.Services.ExpenseCategories.Queries.GetAll;
 using Finances.Services.ExpenseCategories.Queries.GetExpensesByCategory;
