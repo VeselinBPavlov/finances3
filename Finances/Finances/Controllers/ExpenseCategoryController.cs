@@ -1,8 +1,8 @@
-﻿using Finance.Application.ExpenseCategories.Queries.GetAll;
-using Finance.Application.ExpenseCategories.Queries.GetExpensesByCategory;
-using Finance.Application.Expenses.Commands.Delete;
-using Finances.Controllers;
+﻿using Finances.Controllers;
 using Finances.Services.ExpenseCategories.Commands.Create;
+using Finances.Services.ExpenseCategories.Commands.Delete;
+using Finances.Services.ExpenseCategories.Queries.GetAll;
+using Finances.Services.ExpenseCategories.Queries.GetExpensesByCategory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Finance.WebApp.Controllers

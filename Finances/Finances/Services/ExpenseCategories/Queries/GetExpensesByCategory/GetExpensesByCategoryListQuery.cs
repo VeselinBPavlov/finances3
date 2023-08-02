@@ -3,7 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Finance.Application.ExpenseCategories.Queries.GetExpensesByCategory
+namespace Finances.Services.ExpenseCategories.Queries.GetExpensesByCategory
 {
     public class GetExpensesByCategoryListQuery : IRequest<ExpensesByCategoryListVm>
     {
@@ -45,7 +45,7 @@ namespace Finance.Application.ExpenseCategories.Queries.GetExpensesByCategory
 
         public async Task<ExpensesByCategoryListVm> Handle(GetExpensesByCategoryListQuery request, CancellationToken cancellationToken)
         {
-            var expenseCategories = await this.context.ExpenseCategories
+            var expenseCategories = await context.ExpenseCategories
                     .Include(ec => ec.Expenses)
                     .Include(ex => ex.Type)
                     .Where(ex => ex.UserId == request.UserId)
@@ -61,7 +61,7 @@ namespace Finance.Application.ExpenseCategories.Queries.GetExpensesByCategory
                     .ToListAsync(cancellationToken);
 
             var totalExpenses = expenseCategories.Sum(e => e.Sum);
-            
+
             return new ExpensesByCategoryListVm
             {
                 ExpenseCategories = expenseCategories,

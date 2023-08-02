@@ -1,4 +1,4 @@
-﻿namespace Finance.Application.ExpenseCategories.Queries.GetExpensesByCategory
+﻿namespace Finances.Services.ExpenseCategories.Queries.GetExpensesByCategory
 {
     public class ExpenseByCategoryVm
     {
@@ -11,5 +11,12 @@
         public string TypeDescription { get; set; } = default!;
 
         public decimal Sum { get; set; }
+    }
+
+    public class ExpensesByCategoryListVm
+    {
+        public IList<ExpenseByCategoryVm> ExpenseCategories { get; set; }
+
+        public decimal Totals { get; set; }
     }
 }

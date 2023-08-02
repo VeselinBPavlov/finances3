@@ -4,7 +4,7 @@ using Finances.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Finance.Application.Expenses.Commands.Delete
+namespace Finances.Services.ExpenseCategories.Commands.Delete
 {
     public class DeleteExpenseCategoryCommand : IRequest<bool>
     {
@@ -22,7 +22,7 @@ namespace Finance.Application.Expenses.Commands.Delete
 
         public async Task<bool> Handle(DeleteExpenseCategoryCommand request, CancellationToken cancellationToken)
         {
-            var expenseCategory = await this.context.ExpenseCategories
+            var expenseCategory = await context.ExpenseCategories
                 .Include(ec => ec.Expenses)
                 .SingleOrDefaultAsync(ec => ec.Id == request.Id);
 
@@ -31,8 +31,8 @@ namespace Finance.Application.Expenses.Commands.Delete
                 throw new NotFoundException(nameof(ExpenseCategory), request.Id);
             }
 
-            this.context.ExpenseCategories.Remove(expenseCategory);
-            await this.context.SaveChangesAsync(cancellationToken);
+            context.ExpenseCategories.Remove(expenseCategory);
+            await context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

@@ -2,7 +2,7 @@
 using Finances.Common.Mapping;
 using Finances.Models;
 
-namespace Finance.Application.ExpenseCategories.Queries.GetAll
+namespace Finances.Services.ExpenseCategories.Queries.GetAll
 {
     public class ExpenseCategoriesListVm : IMapFrom<ExpenseCategory>
     {

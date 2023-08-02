@@ -4,7 +4,7 @@ using Finances.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Finance.Application.ExpenseCategories.Queries.GetAll
+namespace Finances.Services.ExpenseCategories.Queries.GetAll
 {
     public class GetExpenseCategoriesListQuery : IRequest<List<ExpenseCategoriesListVm>>
     {
@@ -24,12 +24,12 @@ namespace Finance.Application.ExpenseCategories.Queries.GetAll
 
         public async Task<List<ExpenseCategoriesListVm>> Handle(GetExpenseCategoriesListQuery request, CancellationToken cancellationToken)
         {
-            return await this.context.ExpenseCategories
+            return await context.ExpenseCategories
                     .Where(ec => ec.UserId == request.UserId)
                     .OrderBy(ec => ec.TypeId)
                     .ThenBy(ec => ec.Name)
-                    .ProjectTo<ExpenseCategoriesListVm>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);            
+                    .ProjectTo<ExpenseCategoriesListVm>(mapper.ConfigurationProvider)
+                    .ToListAsync(cancellationToken);
         }
     }
 }
