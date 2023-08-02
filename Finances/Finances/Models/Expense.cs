@@ -1,6 +1,4 @@
-﻿using Finance.Domain.Entities;
-
-namespace Finances.Models
+﻿namespace Finances.Models
 {
     public class Expense
     {

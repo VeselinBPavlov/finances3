@@ -1,11 +1,8 @@
-﻿namespace Finances.Models.ValueObjects
+﻿using Finances.Common.Exceptions;
+using Finances.Common.Models;
+
+namespace Finances.Models.ValueObjects
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Entities.Common;
-    using Exceptions;
-
     public class ManagerName : ValueObject<ManagerName>
     {
         private ManagerName()

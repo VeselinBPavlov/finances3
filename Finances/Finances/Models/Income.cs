@@ -1,9 +1,9 @@
-﻿using Finance.Domain.Entities;
-
-namespace Finances.Models
+﻿namespace Finances.Models
 {
     public class Income
     {
+        public int Id { get; set; }
+
         public string? Merchant { get; set; }
 
         public DateTime Date { get; set; }
