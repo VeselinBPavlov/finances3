@@ -10,12 +10,12 @@ namespace Finances.Services.CashflowTypes.Queries.GetAll
     {
     }
 
-    public class GetAllCashflowTypesListQueryHandler : IRequestHandler<GetlCashflowTypesListQuery, List<CashflowTypesVm>>
+    public class GetCashflowTypesListQueryHandler : IRequestHandler<GetlCashflowTypesListQuery, List<CashflowTypesVm>>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetAllCashflowTypesListQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetCashflowTypesListQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
