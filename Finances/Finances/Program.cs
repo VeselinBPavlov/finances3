@@ -1,3 +1,4 @@
+using Finances.Common.Interfaces;
 using Finances.Data;
 using Finances.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -15,6 +16,8 @@ builder.Services.AddMediatR(cfg =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>()!);
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
@@ -65,6 +68,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
+app.MapControllers();
 app.MapRazorPages();
 
 app.MapFallbackToFile("index.html");
