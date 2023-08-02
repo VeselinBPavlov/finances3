@@ -132,5 +132,8 @@
       }
     }
   },
-  "defaultProject": "Finances"
+  "defaultProject": "Finances",
+  "cli": {
+    "analytics": false
+  }
 }
