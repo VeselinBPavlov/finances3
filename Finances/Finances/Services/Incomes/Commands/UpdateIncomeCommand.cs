@@ -7,8 +7,10 @@
     using MediatR;
     using Microsoft.AspNetCore.Identity;
 
-    public class CreateIncomeCommand : IRequest<int>
+    public class UpdateIncomeCommand : IRequest<int>
     {
+        public int Id { get; set; }
+
         public string? Merchant { get; set; }
 
         public string Date { get; set; } = default!;
@@ -20,16 +22,15 @@
         public int CategoryId { get; set; }
 
         public string UserId { get; set; } = default!;
-
     }
 
-    public class CreateIncomeCommandValidator : AbstractValidator<CreateIncomeCommand>
+    public class UpdateIncomeCommandValidator : AbstractValidator<UpdateIncomeCommand>
     {
-        public CreateIncomeCommandValidator()
+        public UpdateIncomeCommandValidator()
         {
-            RuleFor(e => e.Merchant)
-                .MaximumLength(100)
-                .WithMessage("Invalid Mechant");
+            RuleFor(e => e.Id)
+                .NotEmpty()
+                .WithMessage("Id is required");
 
             RuleFor(e => e.Note)
                 .MaximumLength(1000)
@@ -68,19 +69,26 @@
         }
     }
 
-    public class CreateIncomeCommandHandler : IRequestHandler<CreateIncomeCommand, int>
+    public class UpdateIncomeCommandHandler : IRequestHandler<UpdateIncomeCommand, int>
     {
         private readonly IApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public CreateIncomeCommandHandler(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public UpdateIncomeCommandHandler(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
             this.userManager = userManager;
         }
 
-        public async Task<int> Handle(CreateIncomeCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdateIncomeCommand request, CancellationToken cancellationToken)
         {
+            var income = await context.Incomes.FindAsync(request.Id);
+
+            if (income == null)
+            {
+                throw new NotFoundException(nameof(Income), request.Id);
+            }
+
             var user = await userManager.FindByIdAsync(request.UserId);
 
             if (user == null)
@@ -95,17 +103,15 @@
                 throw new NotFoundException(nameof(IncomeCategory), request.CategoryId);
             }
 
-            var income = new Income
-            {
-                Merchant = request.Merchant,
-                Date = DateTime.Parse(request.Date),
-                Note = request.Note,
-                Total = request.Total,
-                UserId = request.UserId,
-                CategoryId = request.CategoryId
-            };
 
-            await context.Incomes.AddAsync(income);
+            income.Merchant = request.Merchant;
+            income.Date = DateTime.Parse(request.Date);
+            income.Note = request.Note;
+            income.UserId = request.UserId;
+            income.Total = request.Total;
+            income.CategoryId = request.CategoryId;
+
+            context.Incomes.Update(income);
 
             await context.SaveChangesAsync(cancellationToken);
 
