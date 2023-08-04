@@ -1,14 +1,13 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Finances.Common.Interfaces;
-using Finances.Services.Expenses.Queries.GetAllExpenses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Finance.Application.Expenses.Queries.GetAllExpenses
+namespace Finances.Services.Expenses.Queries.GetAllExpenses
 {
-    public class GetAllExpensesListQuery : IRequest<List<ExpenseDto>>
+    public class GetExpensesListQuery : IRequest<List<ExpenseDto>>
     {
         public int Month { get; set; }
 
@@ -17,9 +16,9 @@ namespace Finance.Application.Expenses.Queries.GetAllExpenses
         public string UserId { get; set; } = default!;
     }
 
-    public class GetAllExpensesListQueryValidator : AbstractValidator<GetAllExpensesListQuery>
+    public class GetExpensesListQueryValidator : AbstractValidator<GetExpensesListQuery>
     {
-        public GetAllExpensesListQueryValidator()
+        public GetExpensesListQueryValidator()
         {
             RuleFor(e => e.Month)
                 .GreaterThan(1)
@@ -39,25 +38,25 @@ namespace Finance.Application.Expenses.Queries.GetAllExpenses
         }
     }
 
-    public class GetAllExpensesListQueryHandler : IRequestHandler<GetAllExpensesListQuery, List<ExpenseDto>>
+    public class GetExpensesListQueryHandler : IRequestHandler<GetExpensesListQuery, List<ExpenseDto>>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetAllExpensesListQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetExpensesListQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<List<ExpenseDto>> Handle(GetAllExpensesListQuery request, CancellationToken cancellationToken)
+        public async Task<List<ExpenseDto>> Handle(GetExpensesListQuery request, CancellationToken cancellationToken)
         {
             return await context.Expenses
                     .Where(x => x.Date.Month == request.Month && x.Date.Year == request.Year && x.UserId == request.UserId)
                     .OrderByDescending(x => x.Id)
                     .Include(x => x.Category)
                     .ProjectTo<ExpenseDto>(mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);           
+                    .ToListAsync(cancellationToken);
         }
     }
 }
