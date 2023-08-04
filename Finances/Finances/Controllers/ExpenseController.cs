@@ -9,7 +9,7 @@ namespace Finances.Controllers
     public class ExpenseController : ApiController
     {
         //GET: api/Expenses/GetAll
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<List<ExpenseDto>>> GetAll(int month, int year, string userId)
         {
             var result = await Mediator.Send(new GetExpensesListQuery { Month = month, Year = year, UserId = userId });

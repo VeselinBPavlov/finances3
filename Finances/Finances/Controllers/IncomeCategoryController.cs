@@ -9,7 +9,7 @@ namespace Finance.WebApp.Controllers
     public class IncomeCategoryController : ApiController
     {
         //GET: api/IncomeCategory/GetAll
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<List<IncomeCategoryVm>>> GetAll(string userId)
         {
             var result = await Mediator.Send(new GetIncomeCategoriesListQuery() { UserId = userId });
@@ -18,7 +18,7 @@ namespace Finance.WebApp.Controllers
         }
 
         //GET: api/IncomeCategory/GetIncomesByCategory
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<IncomesByCategoryListVm>> GetIncomesByCategory(int month, int year, string userId)
         {
             var result = await Mediator.Send(new GetIncomesByCategoryListQuery() { Month = month, Year = year, UserId = userId });
