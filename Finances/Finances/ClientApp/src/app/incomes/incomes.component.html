@@ -1,0 +1,70 @@
+<h2>Monthly Incomes</h2>
+<br />
+<p className="reference">* When you update income, if you do not chose a date, the incomes will be updated with the current date.</p>
+
+<p *ngIf="!incomes"><em>Loading...</em></p>
+
+<form>
+    <div class="row">
+      <div class="col">
+        <input name="month" type="number" min="1" max="12" class="form-control" placeholder="Month" [(ngModel)]="selectedMonth">
+      </div>
+      <div class="col">
+        <input name="year" type="text" min="2000" max="2120" class="form-control" placeholder="Year" [(ngModel)]="selectedYear">
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-primary" (click)="filterIncomes(selectedMonth, selectedYear)" >Filter</button>
+      </div>
+    </div>
+</form>
+
+<br />
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Date</th>
+        <th scope="col">Merchant</th>
+        <th scope="col">Category</th>
+        <th scope="col">Total</th>
+        <th scope="col">Note</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let income of incomes">
+        <td>{{ income.id }}</td>
+        <td>{{ income.date }}</td>
+        <td>{{ income.merchant }}</td>
+        <td>{{ income.category }}</td>
+        <td>{{ income.total }}</td>
+        <td>{{ income.note }}</td>
+        <td>
+        </td>
+      </tr>
+    </tbody>
+</table>
+
+
+<!-- <filter/> -->
+
+<!-- <CreateForm
+    refresh={this.populateIncomesData}
+    ref={instance => { this.createForm = instance; }}
+    incomeId={this.state.incomeId}
+/> -->
+
+<!-- <TableIncomes
+    incomeIdChange={this.onIncomeIdChange}
+    editIncome={() => this.createForm.fillInputs(this.state.incomeId)}
+    reset={() => this.createForm.cancel()}
+    refresh={this.populateIncomesData}
+    data={data}
+/> -->
+
+<!-- ref='filter'
+monthChange={this.onMonthChange}
+yearChange={this.onYearChange}
+refresh={this.populateIncomesData}
+month={this.state.month}
+year={this.state.year} -->
