@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CategoriesComponent, IncomeCategory } from '../categories/categories.component';
-import { IncomeDto, IncomeClient } from '../web-api-client';
+import { Component, OnInit } from '@angular/core';
+import { IncomeDto, IncomeClient, CreateIncomeCommand, IncomeCategoryClient, IncomeCategoryDto, UpdateIncomeCommand } from '../web-api-client';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-incomes',
@@ -13,27 +12,79 @@ export class IncomesComponent implements OnInit {
   selectedMonth = new Date().getMonth() + 1;
   selectedYear = new Date().getFullYear();
   incomes: IncomeDto[] = [];
+  createCommand: CreateIncomeCommand = new CreateIncomeCommand();
+  incomeCategories: IncomeCategoryDto[] = [];
+  updateCommand: UpdateIncomeCommand = new UpdateIncomeCommand();
+  isEdit = false;
 
   constructor(
-    private incomesClient: IncomeClient
-  ) {} 
+    private incomesClient: IncomeClient,
+    private incomeCategoryClient: IncomeCategoryClient,
+  ) { }
 
   ngOnInit(): void {
     const user = sessionStorage.getItem(`oidc.user:https://localhost:44471:Finances`);
     const parsedUser = JSON.parse(user || '');
     this.userId = parsedUser.profile.sub;
-    const currentDate = new Date();
+    this.incomeCategoryClient.incomeCategory_GetAll(this.userId).subscribe(result => {
+      this.incomeCategories = result.list!;
+      this.createCommand.userId = this.userId;
 
+    }, error => console.error(error));
+
+    this.refreshState();
+  }
+
+  filterIncomes(month: number, year: number) {
+    this.selectedYear = year;
+    this.selectedMonth = month;
+    this.refreshState();
+  }
+
+  createIncome() {
+    this.incomesClient.income_Create(this.createCommand).subscribe(result => {
+      console.log(result);
+      this.createCommand = new CreateIncomeCommand();
+      this.createCommand.userId = this.userId;
+      this.refreshState();
+    }, error => console.error(error));
+  }
+
+  editIncome(id: number) {
+    const income = this.incomes.find(x => x.id === id);
+    this.isEdit = true;
+    this.updateCommand.id = id;
+    this.updateCommand.merchant = income?.merchant;
+    const pipe = new DatePipe('en-US');
+    const date = pipe.transform(income?.date, 'yyyy-MM-dd');
+    this.updateCommand.date = date!;
+    this.updateCommand.total = income?.total;
+    this.updateCommand.note = income?.note;
+    this.updateCommand.categoryId = this.incomeCategories.find(x => x.name === income?.category)?.id!;
+    this.updateCommand.userId = this.userId;
+    console.log(this.updateCommand.note);
+  }
+
+  updateIncome() {
+    this.incomesClient.income_Update(this.updateCommand).subscribe(result => {
+      this.updateCommand = new UpdateIncomeCommand();
+      this.isEdit = false;
+      this.refreshState();
+    }, error => console.error(error));
+  }
+
+  deleteIncome(id: number) {
+    this.incomesClient.income_Delete(id).subscribe(result => {
+      this.refreshState();
+    }, error => console.error(error));
+  }
+
+  refreshState() {
     this.incomesClient.income_GetAll(this.selectedMonth, this.selectedYear, this.userId).subscribe(result => {
       this.incomes = result.list!;
     }, error => console.error(error));
   }
-
-  filterIncomes(month: number, year: number) {
-    this.incomesClient.income_GetAll(month, year, this.userId).subscribe(result => {
-      this.incomes = result.list!;
-    }, error => console.error(error));
-  }
 }
+
 
 
