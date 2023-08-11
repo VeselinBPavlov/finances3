@@ -15,6 +15,7 @@ export class IncomesComponent implements OnInit {
   createCommand: CreateIncomeCommand = new CreateIncomeCommand();
   incomeCategories: IncomeCategoryDto[] = [];
   updateCommand: UpdateIncomeCommand = new UpdateIncomeCommand();
+  merchantValidation: boolean = false;
   isEdit = false;
 
   constructor(
@@ -41,6 +42,16 @@ export class IncomesComponent implements OnInit {
     this.refreshState();
   }
 
+  // validateCreate(): boolean | undefined{
+  //   if (this.createCommand.merchant?.length! > 10){
+  //     this.merchantValidation = true;
+  //     return false;
+  //   }else{
+  //     return true;
+  //   }
+  // }
+
+  
   createIncome() {
     this.incomesClient.income_Create(this.createCommand).subscribe(result => {
       console.log(result);
@@ -62,27 +73,29 @@ export class IncomesComponent implements OnInit {
     this.updateCommand.note = income?.note;
     this.updateCommand.categoryId = this.incomeCategories.find(x => x.name === income?.category)?.id!;
     this.updateCommand.userId = this.userId;
-    console.log(this.updateCommand.note);
   }
 
   updateIncome() {
-    this.incomesClient.income_Update(this.updateCommand).subscribe(result => {
-      this.updateCommand = new UpdateIncomeCommand();
-      this.isEdit = false;
+    this.incomesClient.income_Update(this.updateCommand).subscribe(result => {    
       this.refreshState();
     }, error => console.error(error));
   }
 
+
   deleteIncome(id: number) {
-    this.incomesClient.income_Delete(id).subscribe(result => {
-      this.refreshState();
-    }, error => console.error(error));
+    if(confirm("Are you sure to delete "+id)) {
+      this.incomesClient.income_Delete(id).subscribe(result => {
+        this.refreshState();
+      }, error => console.error(error));
+    }
   }
 
   refreshState() {
     this.incomesClient.income_GetAll(this.selectedMonth, this.selectedYear, this.userId).subscribe(result => {
       this.incomes = result.list!;
     }, error => console.error(error));
+    this.updateCommand = new UpdateIncomeCommand();
+    this.isEdit = false;
   }
 }
 
